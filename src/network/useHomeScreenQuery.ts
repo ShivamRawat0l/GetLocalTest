@@ -2,7 +2,7 @@ import React from "react"
 import { BASE_URL } from "./api"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
-type Job = {
+export type TypeJob = {
     id: number
     title: string
     primary_details: {
@@ -11,7 +11,12 @@ type Job = {
         Job_Type: string
         Experience: string
         Qualification: string
-    }
+    },
+    expire_on: string
+    job_hours: string
+    openings_count: number
+    job_role: string
+    job_category: string
 }
 
 type Result = {
@@ -24,17 +29,15 @@ export default function useHomeScreenQuery() {
     const fetchProjects = (page = 1) =>
         fetch(BASE_URL + page).then((res) => res.json())
 
-    const { isPending, isError, error, data, isFetching, isPlaceholderData } =
+    const { isPending, isError, error, data, isFetching, isPlaceholderData, refetch } =
         useQuery({
             queryKey: ['jobs', page],
             queryFn: () => fetchProjects(page),
             placeholderData: keepPreviousData,
-            networkMode: 'offlineFirst',
-            gcTime: 1000 * 60 * 60 * 2,
-            retry: 2,
         })
 
     return {
+        refetch,
         isPending,
         isPlaceholderData,
         isFetching,

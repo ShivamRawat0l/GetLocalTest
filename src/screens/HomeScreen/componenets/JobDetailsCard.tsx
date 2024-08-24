@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
+import { TypeJob } from '../../../network/useHomeScreenQuery';
 
-export default function JobDetailsCard({ item }: { item: any }) {
+export default function JobDetailsCard({ item }: { item: TypeJob }) {
     const [isExpanded, setIsExpanded] = React.useState(false);
     return (
         <TouchableOpacity
-            key={item.id}
             style={{
                 marginHorizontal: 16,
                 paddingHorizontal: 16,
@@ -23,6 +23,11 @@ export default function JobDetailsCard({ item }: { item: any }) {
                     <Text> {item.primary_details?.Salary ?? ""} </Text>
                     <Text> {item.primary_details?.Job_Type ?? ""} </Text>
                     <Text> {item.primary_details?.Experience ?? ""} </Text>
+                    <Text> {item.job_role ?? ""} </Text>
+                    <Text> {item.expire_on ?? ""} </Text>
+                    <Text> {item.job_hours ?? ""} </Text>
+                    <Text> {item.job_category ?? ""} </Text>
+                    <Text> {item.openings_count ?? ""} </Text>
                 </>
             }
         </TouchableOpacity>
