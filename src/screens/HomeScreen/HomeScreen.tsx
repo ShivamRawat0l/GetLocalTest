@@ -37,7 +37,9 @@ export default function HomeScreen() {
         return <View style={styles.error}>
             <Text style={styles.errorText}>Any Error Occured</Text>
             <Text style={styles.errorDescription}>{error.message}</Text>
-            <Button title="Retry" onPress={refetch} style={styles.retryButton} />
+            <TouchableOpacity onPress={refetch} style={styles.retryButton} >
+                <Text>Retry</Text>
+            </TouchableOpacity>
         </View>
     }
 
@@ -87,10 +89,9 @@ const styles = StyleSheet.create({
     errorDescription: {
         fontSize: 18,
         color: 'black',
-        marginVertical: 10
     },
     retryButton: {
-        marginVertical: 10,
+        marginVertical: 4,
         backgroundColor: 'white',
         borderColor: 'black',
         borderWidth: 1,

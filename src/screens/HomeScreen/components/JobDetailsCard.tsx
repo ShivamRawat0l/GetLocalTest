@@ -1,21 +1,24 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { TypeJob } from '../../../network/useHomeScreenQuery';
 
 export default function JobDetailsCard({ item }: { item: TypeJob }) {
     const [isExpanded, setIsExpanded] = React.useState(false);
     return (
         <TouchableOpacity
-            style={{
-                marginHorizontal: 16,
-                paddingHorizontal: 16,
-                paddingVertical: 20, marginVertical: 10, borderWidth: 1, borderColor: 'black'
-            }}
+            style={styles.container}
             onPress={() => {
                 setIsExpanded(isExpanded => !isExpanded)
             }}
         >
-
+            <Image
+                height={100}
+                width={100}
+                source={{ uri: item.creatives?.thumb_url }}
+                style={{
+                    height: 100,
+                    width: '100%',
+                }} />
             <Text>{item.title}</Text>
             <Text> {item.primary_details?.Place ?? ""} </Text>
             {isExpanded &&
@@ -33,3 +36,27 @@ export default function JobDetailsCard({ item }: { item: TypeJob }) {
         </TouchableOpacity>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        marginHorizontal: 16,
+        paddingHorizontal: 16,
+        paddingVertical: 20, marginVertical: 10, borderWidth: 1, borderColor: 'black'
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'black',
+        marginVertical: 10
+    },
+    details: {
+        fontSize: 18,
+        color: 'black',
+        marginVertical: 10
+    },
+    jobRole: {
+        fontSize: 18,
+        color: 'black',
+        marginVertical: 10
+    }
+})

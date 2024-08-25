@@ -1,6 +1,7 @@
 import { BASE_URL } from "./apiConfig"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { queryClient } from "./reactQuery"
+import { log } from "../utils/logger"
 
 export type JobType = {
     id: number
@@ -11,6 +12,9 @@ export type JobType = {
         Job_Type: string
         Experience: string
         Qualification: string
+    },
+    creatives: {
+        thumb_url: string
     },
     expire_on: string
     job_hours: string
@@ -43,8 +47,10 @@ export default function useHomeScreenQuery() {
                 return undefined
             },
             gcTime: 1000 * 60 * 60 * 2,
-            retry: 1,
+            retry: 0,
         })
+
+    log.info(`HomeScreen Query Status: ${status} isFetching: ${isFetching} isPending: ${isPending} `)
 
     function invalidateQuery() {
         queryClient.resetQueries(['jobs'])
