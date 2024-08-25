@@ -1,6 +1,5 @@
-import React, { useEffect } from "react"
 import { BASE_URL } from "./apiConfig"
-import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { queryClient } from "./reactQuery"
 
 export type JobType = {
@@ -31,13 +30,13 @@ export default function useHomeScreenQuery() {
         return res.json()
     }
 
-    const { isPending, isError, error, data, isFetching, isPlaceholderData, refetch, fetchNextPage, hasNextPage, isRefetching } =
+    const { isPending, isError, error, data, isFetching, isPlaceholderData, refetch, fetchNextPage, hasNextPage, isRefetching, status } =
         useInfiniteQuery({
             queryKey: ['jobs'],
             queryFn: fetchJobs,
             initialPageParam: 1,
             staleTime: 1000,
-            getNextPageParam: (lastPage, pages, pageParam) => {
+            getNextPageParam: (lastPage, _, pageParam) => {
                 if (lastPage.results.length > 0) {
                     return pageParam + 1
                 }
