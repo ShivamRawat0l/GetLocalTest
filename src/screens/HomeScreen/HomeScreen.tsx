@@ -35,9 +35,9 @@ export default function HomeScreen() {
 
     function renderError() {
         return <View style={styles.error}>
-            <Text>Any Error Occured</Text>
-            <Text>{error.message}</Text>
-            <Button title="Retry" onPress={refetch} />
+            <Text style={styles.errorText}>Any Error Occured</Text>
+            <Text style={styles.errorDescription}>{error.message}</Text>
+            <Button title="Retry" onPress={refetch} style={styles.retryButton} />
         </View>
     }
 
@@ -71,9 +71,31 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
     error: {
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingVertical: 20
     },
     loader: {
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
+    errorText: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: 'red',
+        marginVertical: 20
+    },
+    errorDescription: {
+        fontSize: 18,
+        color: 'black',
+        marginVertical: 10
+    },
+    retryButton: {
+        marginVertical: 10,
+        backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10
     }
 })

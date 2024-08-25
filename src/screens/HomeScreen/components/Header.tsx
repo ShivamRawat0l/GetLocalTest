@@ -1,13 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
+import { Fonts } from "../../../styles/fonts";
 
 export function Header() {
     return <View style={styles.titleContainer}>
-        <Text style={{
-            fontSize: 30,
-            fontWeight: 'bold',
-            color: 'black',
-            marginVertical: 10
-        }}>Job Listing</Text>
+        <Text style={[Fonts.title, styles.title]}>
+            Job Listing
+        </Text>
     </View>
 }
 
@@ -16,4 +14,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    title: {
+        marginVertical: 10
+    }
 })
