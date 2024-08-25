@@ -1,8 +1,9 @@
-import React from "react"
-import { BASE_URL } from "./api"
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import React, { useEffect } from "react"
+import { BASE_URL } from "./apiConfig"
+import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { queryClient } from "./reactQuery"
 
-export type TypeJob = {
+export type JobType = {
     id: number
     title: string
     primary_details: {
@@ -20,31 +21,49 @@ export type TypeJob = {
 }
 
 type Result = {
-    results: Job[]
+    results: JobType[]
 }
 
 export default function useHomeScreenQuery() {
-    const [page, setPage] = React.useState(1)
 
-    const fetchProjects = (page = 1) =>
-        fetch(BASE_URL + page).then((res) => res.json())
+    const fetchJobs = async ({ pageParam }: { pageParam: number }) => {
+        const res = await fetch(BASE_URL + pageParam)
+        return res.json()
+    }
 
-    const { isPending, isError, error, data, isFetching, isPlaceholderData, refetch } =
-        useQuery({
-            queryKey: ['jobs', page],
-            queryFn: () => fetchProjects(page),
-            placeholderData: keepPreviousData,
+    const { isPending, isError, error, data, isFetching, isPlaceholderData, refetch, fetchNextPage, hasNextPage, isRefetching } =
+        useInfiniteQuery({
+            queryKey: ['jobs'],
+            queryFn: fetchJobs,
+            initialPageParam: 1,
+            staleTime: 1000,
+            getNextPageParam: (lastPage, pages, pageParam) => {
+                if (lastPage.results.length > 0) {
+                    return pageParam + 1
+                }
+                return undefined
+            },
+            gcTime: 1000 * 60 * 60 * 2,
+            retry: 1,
         })
 
+    function invalidateQuery() {
+        queryClient.resetQueries(['jobs'])
+    }
+
     return {
+        invalidateQuery,
         refetch,
         isPending,
         isPlaceholderData,
         isFetching,
         isError,
         error,
-        data: data as Result,
-        setPage,
-        page
+        data: data?.pages.flatMap(group => {
+            return group.results
+        }) as Result[] ?? [],
+        fetchNextPage,
+        hasNextPage,
+        isRefetching
     }
 }

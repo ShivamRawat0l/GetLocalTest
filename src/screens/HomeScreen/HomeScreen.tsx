@@ -1,47 +1,46 @@
-import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, FlatList, Text, ActivityIndicator, Button, StyleSheet, } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { SafeAreaView, View, FlatList, Text, ActivityIndicator, Button, StyleSheet, RefreshControl, } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useHomeScreenQuery from '../../network/useHomeScreenQuery';
-import JobDetailsCard from './componenets/JobDetailsCard';
+import JobDetailsCard from './components/JobDetailsCard';
 
 export default function HomeScreen() {
-    const { isError, isPending, isFetching, setPage, data, page, isPlaceholderData, refetch } = useHomeScreenQuery();
-
-    const [jobs, setJobs] = useState<any[]>([]);
-    const { bottom } = useSafeAreaInsets()
-
-    useEffect(() => {
-        setJobs(jobs => [...jobs, ...(data?.results ?? [])]);
-    }, [data])
+    const { isError, isPending, invalidateQuery, isFetching, fetchNextPage, data, refetch, hasNextPage, isRefetching, error } = useHomeScreenQuery();
 
     return (
         <SafeAreaView>
-            <View style={styles.titleContainer}>
-                <Text style={{
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    color: 'black'
-                }}>JOBS</Text>
-                <Text>Page: {page}</Text>
-            </View>
             <FlatList
-                style={{ marginBottom: bottom }}
-                refreshing={isFetching}
-                onRefresh={() => {
-                    setPage(1);
-                }}
                 onEndReached={() => {
-                    if (!isFetching && !isError && !isPending && !isPlaceholderData && data.results.length > 0) {
-                        setPage(page => page + 1)
+                    if (!isFetching && !isError && !isPending && data.length > 0 && hasNextPage) {
+                        fetchNextPage()
                     }
                 }}
-                data={jobs}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefetching}
+                        onRefresh={() => {
+                            invalidateQuery();
+                            refetch();
+                        }}
+                    />
+                }
+                data={data}
                 renderItem={({ item }) => {
                     if (item.id) {
                         return <JobDetailsCard item={item} key={item.id} />
                     } else {
                         return <></>
                     }
+                }}
+                ListHeaderComponent={() => {
+                    return <View style={styles.titleContainer}>
+                        <Text style={{
+                            fontSize: 30,
+                            fontWeight: 'bold',
+                            color: 'black',
+                            marginVertical: 10
+                        }}>JOBS</Text>
+                    </View>
                 }}
                 ListFooterComponent={() => {
                     if (isPending || isFetching) {
@@ -53,6 +52,7 @@ export default function HomeScreen() {
                         return (
                             <View style={{ alignItems: 'center' }}>
                                 <Text>Any Error Occured</Text>
+                                <Text>{error.message}</Text>
                                 <Button title="Retry" onPress={() => {
                                     refetch()
                                 }} />

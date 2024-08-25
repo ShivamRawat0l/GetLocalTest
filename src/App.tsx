@@ -5,28 +5,23 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            gcTime: 1000 * 60 * 60 * 2,
-        }
-    }
-})
+import { queryClient } from "./network/reactQuery";
+import { View } from "react-native";
 
 const asyncStoragePersister = createAsyncStoragePersister({
     storage: AsyncStorage,
 })
 
 export default function App() {
-
     return (
         <SafeAreaProvider>
             <PersistQueryClientProvider
                 client={queryClient}
                 persistOptions={{ persister: asyncStoragePersister }}
             >
-                <HomeScreen />
+                <View style={{ flex: 1, backgroundColor: 'white' }}>
+                    <HomeScreen />
+                </View>
             </PersistQueryClientProvider>
         </SafeAreaProvider>
     )
