@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { SafeAreaView, View, FlatList, Text, ActivityIndicator, Button, StyleSheet, RefreshControl, } from 'react-native'
+import { SafeAreaView, View, FlatList, Text, ActivityIndicator, Button, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useHomeScreenQuery from '../../network/useHomeScreenQuery';
 import JobDetailsCard from './components/JobDetailsCard';
@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     retryButton: {
-        marginVertical: 4,
+        marginVertical: 14,
         backgroundColor: 'white',
         borderColor: 'black',
         borderWidth: 1,
         paddingVertical: 10,
-        paddingHorizontal: 20,
+        paddingHorizontal: 30,
         borderRadius: 10
     }
 })
