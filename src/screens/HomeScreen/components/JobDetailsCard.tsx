@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
         borderWidth: 4,
         borderColor: 'black',
         borderRadius: 10,
-        elevation: 5
     },
     divider: {
         height: 1,

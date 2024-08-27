@@ -45,7 +45,7 @@ export default function HomeScreen() {
 
     function renderLoader() {
         return <View style={styles.loader}>
-            <ActivityIndicator size="large" />
+            <ActivityIndicator size="large" color="#33aa33" />
         </View>
     }
 
